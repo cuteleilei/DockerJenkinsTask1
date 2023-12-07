@@ -12,7 +12,7 @@ pipeline {
         
                 docker network create jenk-network || echo "Network Already Exists"
                 docker stop flask-app || echo "flask-app not Running"
-                docker stop nginx || echo "nginx not running"
+                docker stop mynginx || echo "nginx not running"
                 docker rm -f $(docker ps -qa) || true
                 
                 '''
@@ -37,7 +37,7 @@ pipeline {
 
                 sh '''
             
-                docker push cutelelei/flask-app:latest
+                docker push cuteleilei/flask-app:latest
                 docker push cuteleilei/flask-app:v${BUILD_NUMBER}
                 docker push cuteleilei/mynginx:latest
                 docker push cuteleilei/mynginx:v${BUILD_NUMBER}
