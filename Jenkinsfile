@@ -9,10 +9,12 @@ pipeline {
             steps {
 
                 sh '''
+        
                 docker network create jenk-network || echo "Network Already Exists"
                 docker stop flask-app || echo "flask-app not Running"
                 docker stop nginx || echo "nginx not running"
                 docker rm -f $(docker ps -qa) || true
+                
                 '''
             }
 
@@ -23,8 +25,23 @@ pipeline {
             steps {
 
                 sh '''
-                docker build -t flask-app .
-                docker build -t mynginx ./nginx
+                docker build -t cuteleilei/flask-app:latest -t cuteleilei/flask-app:v${BUILD_NUMBER} .
+                docker build -t cuteleilei/mynginx -t cuteleilei/mynginx:v${BUILD_NUMBER} ./nginx
+                '''
+            }
+        }
+
+         stage('Push') {
+
+            steps {
+
+                sh '''
+            
+                docker push cutelelei/flask-app:latest
+                docker push cuteleilei/flask-app:v${BUILD_NUMBER}
+                docker push cuteleilei/mynginx:latest
+                docker push cuteleilei/mynginx:v${BUILD_NUMBER}
+                
                 '''
             }
         }
